@@ -1,1 +1,1 @@
-Collection of challenges from https://www.codewars.com
+A collection of challenges from https://www.codewars.com
