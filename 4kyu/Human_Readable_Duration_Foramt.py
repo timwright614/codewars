@@ -1,25 +1,38 @@
 # 11/07/22 - https://www.codewars.com/kata/52742f58faf5485cae000b9a
 
-def sum_of_intervals(intervals):
-    max_upper = max([i[1] for i in intervals])
+def format_duration(seconds):
 
-    interval_index = [i[0]+i[1]/max_upper for i in intervals]
+    if seconds == 0:
+        return 'now'
 
-    intervals_sorted = [i for i,index in sorted(zip(intervals,interval_index))]
+    M = 60
+    H = M*60
+    D = H*24
+    Y = D*365
 
-    intervals_no_overlap = []
+    y = seconds // Y
+    d = (seconds - y*Y) // D
+    h = (seconds - y*Y - d*D) // H
+    m = (seconds - y*Y - d*D - h*H) // M
+    s = seconds - y*Y - d*D - h*H - m*M
 
-    for i in intervals_sorted:
-        if len(intervals_no_overlap) == 0:
-            intervals_no_overlap.append(i)
-        elif i[0] >= intervals_no_overlap[-1][1]:
-            intervals_no_overlap.append(i)
-        elif i[1] > intervals_no_overlap[-1][1]:
-            intervals_no_overlap.append([intervals_no_overlap[-1][1],i[1]])
+    time = [y,d,h,m,s]
 
-    no_overlap_span = 0
+    units = ['year', 'day', 'hour', 'minute', 'second']
 
-    for i in intervals_no_overlap:
-        no_overlap_span += i[1]-i[0]
+    time_as_strings = []
 
-    return no_overlap_span
+    for i in range(5):
+        if 1 >= time[i] > 0:
+            time_as_strings.append(str(time[i]) + ' ' + units[i])
+        elif time[i] > 1:
+            time_as_strings.append(str(time[i]) + ' ' + units[i]+'s')
+
+    seperators = ['',' and ',', ',', ',', ']
+
+    human_readable = ''
+
+    for i in range(len(time_as_strings)):
+        human_readable = time_as_strings[-(i+1)] + seperators[i] + human_readable
+
+    return human_readable
